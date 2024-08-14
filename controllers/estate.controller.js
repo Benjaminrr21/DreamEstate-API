@@ -12,7 +12,7 @@ const getAll = async(req,res) => {
 const getById = async(req,res) => {
     try {
         const {id} = req.params;
-        const es = await Estate.findById(id)
+        const es = await Estate.findById(id).populate("owner")
         if(!es) res.status(404).json({message:"Nekretnina ne postoji u bazi."})
         else res.status(200).json(es);
     }catch(e) {

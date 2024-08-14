@@ -84,7 +84,7 @@ const login = async (req,res) => {
                     maxAge:864000000,
                     httpOnly:true
                 })
-                res.status(200).json({message:"Uspesno logovanje!"})
+                res.status(200).json({message:"Uspesno logovanje!",token:token,role:u.role})
             }
         })
     }
