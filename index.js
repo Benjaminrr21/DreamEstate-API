@@ -2,6 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const userRouter = require('./routes/user.route.js')
 const estateRouter = require('./routes/estate.route.js')
+const favoritelistRouter = require('./routes/favoritelist.route.js')
 const http = require('http')
 const {Server} = require('socket.io')
 const app = express();
@@ -47,6 +48,7 @@ app.post("/api/notify",(req,res) => {
 
 app.use('/api/users',userRouter);
 app.use('/api/estates',estateRouter);
+app.use('/api/favoritelist',favoritelistRouter);
 
 app.get("/",(req,res)=>{
     res.send("HELLO !!!");

@@ -67,11 +67,24 @@ const filter = async(req,res) => {
         res.status(500).json({message:e.message})
     }
 }
+const sort = async (req,res) => {
+    try {
+        const { sortBy = 'pricePerM2', order = 'asc' } = req.query;
+        const sortOrder = order === 'asc' ? 1 : -1;
+        const estates = await Estate.find({}).sort({ [sortBy]: sortOrder });
+        res.status(200).json(estates);
+
+    }catch(e){
+        console.log(e)
+        res.status(500).json({message:e.message})
+    }
+}
 
 module.exports = {
     getAll,
     getById,
     add,
     deletee,
-    update,filter
+    update,filter,
+    sort
 }
