@@ -28,6 +28,10 @@ const UserSchema = mongoose.Schema({
         type:String,
         required:true
     },
+    verificationCode:{
+        type:Number,
+        required:true
+    },
     estates: [{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Estate"

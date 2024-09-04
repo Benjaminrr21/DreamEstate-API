@@ -53,14 +53,16 @@ const update = async(req,res) => {
 }
 const filter = async(req,res) => {
     try {
-        const {type,rooms,category,minPrice,maxPrice,location} = req.query;
+        const {type,rooms,category,minPrice,maxPrice,city,minArea,maxArea} = req.query;
         const filter = {};
         if(type) filter.type = type;
         if(rooms) filter.rooms = rooms;
         if(category) filter.category = category;
         if(minPrice) filter.pricePerM2 = {$gte: minPrice};
         if(maxPrice) filter.pricePerM2 = {$lte: maxPrice};
-        if(location) filter.location = location;
+        if(minArea) filter.area = {$gte: minArea};
+        if(maxArea) filter.area = {$lte: maxArea};
+        if(city) filter.city = city;
         const estates = await Estate.find(filter);
         res.json(estates)
     }catch(e){
@@ -79,6 +81,16 @@ const sort = async (req,res) => {
         res.status(500).json({message:e.message})
     }
 }
+const getMyEstates = async(req,res) => {
+    try {
+        const {id} = req.params;
+        const es = await Estate.find({owner:id})
+        if(!es) res.status(404).json({message:"Nekretnina ovog oglasivaca ne postoji u bazi."})
+        else res.status(200).json(es);
+    }catch(e) {
+        res.status(500).json({message:e.message})
+    }
+}
 
 module.exports = {
     getAll,
@@ -86,5 +98,6 @@ module.exports = {
     add,
     deletee,
     update,filter,
-    sort
+    sort,
+    getMyEstates
 }

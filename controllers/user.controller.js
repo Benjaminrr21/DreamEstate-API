@@ -3,6 +3,30 @@ const User = require('../models/user.model.js')
 const {createToken,verifyToken} = require('../jwt.js')
 const bcrypt = require('bcrypt')
 const cookieParser = require('cookie-parser')
+const nodemailer = require("nodemailer");
+require("dotenv").config()
+
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false, 
+  auth: {
+    user:process.env.APP_USER,
+    pass: process.env.APP_PASSWORD,
+  },
+});
+
+
+
+const sendMail = async(transporter, mailOptions) => {
+    try{
+        await transporter.sendMail(mailOptions)
+        console.log("Email je poslat!")
+    }catch(error){
+        console.log(error)
+    }
+}
+
 
 
 const getAllUsers = async (req, res) => {
@@ -47,7 +71,7 @@ const getById = async(req,res) => {
 
 const register = async (req,res) => {
         try {
-        const {firstName,lastName,email,phone,role,username,password} = req.body;
+        const {firstName,lastName,email,phone,role,username,password,code} = req.body;
         bcrypt.hash(password,10)
         .then((hash) => {
             User.create({
@@ -57,8 +81,20 @@ const register = async (req,res) => {
                 phone:phone,
                 role:role,
                 username:username,
-                password:hash
+                password:hash,
+                verificationCode:code
             }).then(() => {
+                const mailOptions = {
+                    from: {
+                        name:"Dream Estate",
+                        address:process.env.APP_USER
+                    }, // sender address
+                    to: email, // list of receivers
+                    subject: "DreamEstate registracija", // Subject line
+                    text: "Dobrodosli!", // plain text body
+                    html: "<b>Dobrodosli! Vas kod za registraciju je: "+code+"</b>", // html body
+                }
+                sendMail(transporter, mailOptions)
                 res.status(200).json("Uspesna registracija!");
             }).catch((e) => {
                 res.status(400).json({message:e.message})

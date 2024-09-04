@@ -13,6 +13,10 @@ const EstateSchema = mongoose.Schema({
         type: Number,
         required:true
     },
+    city:{
+        type:String,
+        required:true
+    },
     location: {
         type:String,
         required:true
@@ -29,7 +33,16 @@ const EstateSchema = mongoose.Schema({
     heating: {
         type:String
     },
-    photo: {
+    image1: {
+        type:String
+    },
+    image2: {
+        type:String
+    },
+    image3: {
+        type:String
+    },
+    image4: {
         type:String
     },
     owner: {
